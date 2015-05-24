@@ -37,15 +37,19 @@ int main() {
 #include <unistd.h>
 #include <stdlib.h>
 
+#define BUFF_SIZE 256
+
 int main() {
 	int sockfd;
 	int len;
 	struct sockaddr_un address;
 	int result;
 	//char ch = 'A';
-	char buf[100];
-	printf(":");
+	char buf[BUFF_SIZE];
+/*	printf(":");
 	scanf("%s", &buf);
+*/
+	int num;
 	
 	sockfd = socket(AF_UNIX, SOCK_STREAM, 0);
 	address.sun_family = AF_UNIX;
@@ -56,9 +60,18 @@ int main() {
 	 	perror("oops : client1");
 	 	exit(1);
 	}
-	write(sockfd, &buf, strlen(buf));
-	read(sockfd, &buf, strlen(buf));
-	printf("char from server = %s\n", &buf);
-	close(sockfd);
-	exit(0);
+	while (1)
+	{
+		printf("VVOD:");
+		//scanf("%s", buf);
+		fgets(buf, BUFF_SIZE, stdin);
+		write(sockfd, &buf, strlen(buf));
+		read(sockfd, &buf, strlen(buf));
+//		printf(":%s\n", &buf);
+		read(sockfd, &num, sizeof(int));
+		printf("%d", &num); 
+		printf(":%s\n", &buf);
+		close(sockfd);
+		//exit(0);
+	}
 }
