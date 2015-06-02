@@ -15,14 +15,16 @@ int sockfd;
 
 void *listener() {
 	int nread;
-	
-while (1) {
-		//printf("In thread\n");
-		ioctl(sockfd, FIONREAD, &nread);
-		printf("In thread\n");
+
+	while (1) {
+		//ioctl(sockfd, FIONREAD, &nread);
 		char buf[BUFF_SIZE] = {0};
-		read(sockfd, buf, BUFF_SIZE-1);
-		printf(":%s\n", &buf);
+		nread = read(sockfd, buf, BUFF_SIZE-1);
+		printf(":%s", &buf);
+		if (nread == 0)
+		{
+			exit(1);
+		}
 	}
 }
 
@@ -41,7 +43,6 @@ int main() {
 
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
-	
 
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = inet_addr("127.0.0.1");
@@ -52,21 +53,12 @@ int main() {
 	 	perror("oops : client1");
 	 	exit(1);
 	}
-	pthread_attr_setdetachstate(&thread_attr, PTHREAD_CREATE_JOINABLE);
+	pthread_attr_setdetachstate(&thread_attr, PTHREAD_CREATE_DETACHED);
 	pthread_create(&a_thread, &thread_attr, &listener, (void *)0);
 
 	while (1)
 	{
-		//printf(":");
-		//scanf("%s", buf);
 		fgets(buf, BUFF_SIZE, stdin);
 		write(sockfd, buf, strlen(buf));
-		//read(sockfd, &buf, strlen(buf));
-//		printf(":%s\n", &buf);
-		//read(sockfd, &num, sizeof(int));
-		//printf("%d", &num); 
-		//printf(":%s\n", &buf);
-		//close(sockfd);
-		//exit(0);
 	}
 }
