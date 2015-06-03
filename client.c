@@ -20,11 +20,11 @@ void *listener()
 	while (1) {
 
 		char buf[BUFF_SIZE] = {0};
-
+		
 		read(sockfd, &fd, sizeof(fd));
 		nread = read(sockfd, buf, BUFF_SIZE-1);
-		printf("%d", printf);
-		fd(":%s", buf);
+		printf("%d", fd);
+		printf(":%s", buf);
 		if (nread == 0)
 			exit(1);
 	}
