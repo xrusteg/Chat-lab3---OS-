@@ -65,7 +65,7 @@ int main(void)
 					num_clients++;
 					printf("adding client %d\n", client_sockfd);
 				}
-					else {
+				else {
 					memset(buf, 0, sizeof(buf));
 					nread = read(fd, buf, BUFF_SIZE-1);
 					if (nread == 0) {
@@ -76,6 +76,7 @@ int main(void)
 					else {
 						for (i = 0; i < num_clients; i++) {
 							//printf(":%s\n", &buf);
+							write(clients[i], &fd, sizeof(fd));
 							write(clients[i], &buf, strlen(buf));
 						}
 					}
